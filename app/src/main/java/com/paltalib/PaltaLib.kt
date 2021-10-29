@@ -1,17 +1,22 @@
 package com.paltalib
 
+import android.app.Activity
+import android.app.Application
 import android.content.Context
-import com.amplitude.api.Amplitude
-import com.amplitude.api.AmplitudeClient
-import com.amplitude.api.Identify
-import com.amplitude.api.Revenue
+import com.amplitude.api.*
+import com.google.gson.Gson
+import com.paltalib.entity.Target
+import com.paltalib.entity.TargetList
+import com.paltalib.extensions.readAssetsFile
+import com.paltalib.network.NetworkClient
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import org.json.JSONArray
 import org.json.JSONObject
 import java.util.concurrent.TimeUnit
 
-/**
- * This is the main PaltaLib class that manages Amplitude SDK instances. <br><br>
- */
-class PaltaLib private constructor() {
+class PaltaLib private constructor(): PaltaWrapper {
 
     private val amplitudeInstances = mutableListOf<AmplitudeClient>()
     private val targets = mutableListOf<Target>()
@@ -20,37 +25,16 @@ class PaltaLib private constructor() {
         val instance = PaltaLib()
     }
 
-    /**
-     * Log event with the specified event type, event properties, groups, timestamp, with optional
-     * out of session flag. If out of session is true, then the sessionId will be -1 for the event,
-     * indicating that it is not part of the current session. Note: this might be useful when
-     * logging events for notifications received.
-     * <b>Note:</b> this is asynchronous and happens on a background thread.
-     *
-     * @param eventType       the event type
-     * @param eventProperties the event properties
-     * @param groups          the groups
-     * @param timestamp       the timestamp in millisecond since epoch
-     * @param outOfSession    the out of session
-     * @see <a href="https://github.com/amplitude/Amplitude-Android#setting-event-properties">
-     *     Setting Event Properties</a>
-     * @see <a href="https://github.com/amplitude/Amplitude-Android#setting-groups">
-     *     Setting Groups</a>
-     * @see <a href="https://github.com/amplitude/Amplitude-Android#tracking-sessions">
-     *     Tracking Sessions</a>
-     */
-    fun logEvent(
+    override fun logEvent(
         eventType: String,
-        eventProperties: JSONObject? = null,
-        groups: JSONObject? = null,
-        timestamp: Long? = null,
-        outOfSession: Boolean = false
+        eventProperties: JSONObject?,
+        groups: JSONObject?,
+        timestamp: Long?,
+        outOfSession: Boolean
     ) {
-
         timestamp?.let {
             amplitudeInstances.forEach {
                 it.logEvent(eventType, eventProperties, groups, timestamp, outOfSession)
-                println("The element is $it")
             }
         } ?: amplitudeInstances.forEach {
             it.logEvent(
@@ -60,34 +44,39 @@ class PaltaLib private constructor() {
                 System.currentTimeMillis(),
                 outOfSession
             )
-            println("The element is $it")
         }
     }
 
-    /**
-     * Sets the user id (can be null).
-     * If startNewSession is true, ends the session for the previous user and starts a new
-     * session for the new user id.
-     *
-     * @param userId the user id
-     * @return the AmplitudeClient
-     */
-    fun setUserId(userId: String?, startNewSession: Boolean = false): PaltaLib {
+    override fun logEventSync(
+        eventType: String,
+        eventProperties: JSONObject?,
+        groups: JSONObject?,
+        timestamp: Long?,
+        outOfSession: Boolean
+    ) {
+        timestamp?.let {
+            amplitudeInstances.forEach {
+                it.logEventSync(eventType, eventProperties, groups, timestamp, outOfSession)
+            }
+        } ?: amplitudeInstances.forEach {
+            it.logEventSync(
+                eventType,
+                eventProperties,
+                groups,
+                System.currentTimeMillis(),
+                outOfSession
+            )
+        }
+    }
+
+    override fun setUserId(userId: String?, startNewSession: Boolean): PaltaLib {
         amplitudeInstances.forEach {
             it.setUserId(userId, startNewSession)
         }
         return this
     }
 
-    /**
-     * Identify. Use this to send an {@link com.amplitude.api.Identify} object containing
-     * user property operations to Amplitude server. If outOfSession is true, then the identify
-     * event is sent with a session id of -1, and does not trigger any session-handling logic.
-     *
-     * @param identify an {@link Identify} object
-     * @param outOfSession whther to log the identify event out of session
-     */
-    fun identify(identify: Identify, outOfSession: Boolean = false) {
+    override fun identify(identify: Identify?, outOfSession: Boolean) {
         amplitudeInstances.forEach {
             it.identify(
                 identify,
@@ -96,11 +85,11 @@ class PaltaLib private constructor() {
         }
     }
 
-    fun groupIdentify(
-        groupType: String,
-        groupName: Any,
-        groupIdentify: Identify,
-        outOfSession: Boolean = false
+    override fun groupIdentify(
+        groupType: String?,
+        groupName: Any?,
+        groupIdentify: Identify?,
+        outOfSession: Boolean
     ) {
         amplitudeInstances.forEach {
             it.groupIdentify(
@@ -112,27 +101,9 @@ class PaltaLib private constructor() {
         }
     }
 
-
-    /**
-     * Log revenue with a productId, quantity, price, and receipt data for revenue verification.
-     *
-     * @param productId        the product id
-     * @param quantity         the quantity
-     * @param price            the price
-     * @param receipt          the receipt
-     * @param receiptSignature the receipt signature
-     * @deprecated - use {@code logRevenueV2} instead
-     * @see <a href="https://github.com/amplitude/Amplitude-Android#tracking-revenue">
-     *     Tracking Revenue</a>
-     */
-    @Deprecated(
-        "", ReplaceWith(
-            "instance.logRevenueV2(revenue)",
-        )
-    )
-    fun logRevenue(
-        productId: String? = null, quantity: Int = 1,
-        price: Double, receipt: String? = null, receiptSignature: String? = null
+    override fun logRevenue(
+        productId: String?, quantity: Int,
+        price: Double, receipt: String?, receiptSignature: String?
     ) {
         amplitudeInstances.forEach {
             it.logRevenue(
@@ -145,45 +116,317 @@ class PaltaLib private constructor() {
         }
     }
 
-    /**
-     * Log revenue v2. Create a {@link Revenue} object to hold your revenue data and properties,
-     * and log it as a revenue event using this method.
-     *
-     * @param revenue a {@link Revenue} object
-     */
-    fun logRevenueV2(revenue: Revenue?) {
+    override fun logRevenueV2(revenue: Revenue?) {
         amplitudeInstances.forEach {
             it.logRevenueV2(revenue)
         }
     }
 
-    /**
-     * Sets user properties. This is a convenience wrapper around the
-     * {@link Identify} API to set multiple user properties with a single
-     * command. <b>Note:</b> the replace parameter is deprecated and has no effect.
-     *
-     * @param userProperties the user properties
-     * @param replace        the replace - has no effect
-     * @deprecated
-     */
-    fun setUserProperties(userProperties: JSONObject?, replace: Boolean = false) {
+    override fun setUserProperties(userProperties: JSONObject?, replace: Boolean) {
         amplitudeInstances.forEach {
             it.setUserProperties(userProperties)
         }
     }
 
-    /**
-     * Sets event upload max batch size. This controls the maximum number of events sent with
-     * each upload request.
-     *
-     * @param eventUploadMaxBatchSize the event upload max batch size
-     * @return the AmplitudeClient
-     */
-    fun setEventUploadMaxBatchSize(eventUploadMaxBatchSize: Int): PaltaLib {
+    override fun setEventUploadMaxBatchSize(eventUploadMaxBatchSize: Int): PaltaLib {
         amplitudeInstances.forEach {
             it.setEventUploadMaxBatchSize(eventUploadMaxBatchSize)
         }
         return this
+    }
+
+    override fun enableForegroundTracking(app: Application): PaltaLib {
+        amplitudeInstances.forEach {
+            it.enableForegroundTracking(app)
+        }
+        return this
+    }
+
+    override fun enableNewDeviceIdPerInstall(newDeviceIdPerInstall: Boolean): PaltaLib {
+        amplitudeInstances.forEach {
+            it.enableNewDeviceIdPerInstall(newDeviceIdPerInstall)
+        }
+        return this
+    }
+
+    override fun useAdvertisingIdForDeviceId(): PaltaLib {
+        amplitudeInstances.forEach {
+            it.useAdvertisingIdForDeviceId()
+        }
+        return this
+    }
+
+    override fun useAppSetIdForDeviceId(): PaltaLib {
+        amplitudeInstances.forEach {
+            it.useAppSetIdForDeviceId()
+        }
+        return this
+    }
+
+    override fun enableLocationListening(): PaltaLib {
+        amplitudeInstances.forEach {
+            it.enableLocationListening()
+        }
+        return this
+    }
+
+
+    override fun disableLocationListening(): PaltaLib {
+        amplitudeInstances.forEach {
+            it.disableLocationListening()
+        }
+        return this
+    }
+
+    override fun setEventUploadThreshold(eventUploadThreshold: Int): PaltaLib {
+        amplitudeInstances.forEach {
+            it.setEventUploadThreshold(eventUploadThreshold)
+        }
+        return this
+    }
+
+    override fun setEventMaxCount(eventMaxCount: Int): PaltaLib {
+        amplitudeInstances.forEach {
+            it.setEventMaxCount(eventMaxCount)
+        }
+        return this
+    }
+
+    override fun setEventUploadPeriodMillis(eventUploadPeriodMillis: Int): PaltaLib {
+        amplitudeInstances.forEach {
+            it.setEventUploadPeriodMillis(eventUploadPeriodMillis)
+        }
+        return this
+    }
+
+    override fun setMinTimeBetweenSessionsMillis(minTimeBetweenSessionsMillis: Long): PaltaLib {
+        amplitudeInstances.forEach {
+            it.setMinTimeBetweenSessionsMillis(minTimeBetweenSessionsMillis)
+        }
+        return this
+    }
+
+    override fun setServerUrl(serverUrl: String): PaltaLib {
+        amplitudeInstances.forEach {
+            it.setServerUrl(serverUrl)
+        }
+        return this
+    }
+
+    override fun setBearerToken(token: String): PaltaLib {
+        amplitudeInstances.forEach {
+            it.setBearerToken(token)
+        }
+        return this
+    }
+
+    override fun setSessionTimeoutMillis(sessionTimeoutMillis: Long): PaltaLib {
+        amplitudeInstances.forEach {
+            it.setSessionTimeoutMillis(sessionTimeoutMillis)
+        }
+        return this
+    }
+
+    override fun setTrackingOptions(trackingOptions: TrackingOptions): PaltaLib {
+        amplitudeInstances.forEach {
+            it.setTrackingOptions(trackingOptions)
+        }
+        return this
+    }
+
+    override fun enableCoppaControl(): PaltaLib {
+        amplitudeInstances.forEach {
+            it.enableCoppaControl()
+        }
+        return this
+    }
+
+    override fun disableCoppaControl(): PaltaLib {
+        amplitudeInstances.forEach {
+            it.disableCoppaControl()
+        }
+        return this
+    }
+
+    override fun setOptOut(optOut: Boolean): PaltaLib {
+        amplitudeInstances.forEach {
+            it.setOptOut(optOut)
+        }
+        return this
+    }
+
+    override fun setLibraryName(libraryName: String?): PaltaLib {
+        amplitudeInstances.forEach {
+            it.setLibraryName(libraryName)
+        }
+        return this
+    }
+
+    override fun setLibraryVersion(libraryVersion: String?): PaltaLib {
+        amplitudeInstances.forEach {
+            it.setLibraryVersion(libraryVersion)
+        }
+        return this
+    }
+
+    override fun isOptedOut(): Boolean {
+        return amplitudeInstances[0].isOptedOut
+    }
+
+    override fun enableLogging(enableLogging: Boolean): PaltaLib {
+        amplitudeInstances.forEach {
+            it.enableLogging(enableLogging)
+        }
+        return this
+    }
+
+    override fun setLogLevel(logLevel: Int): PaltaLib {
+        amplitudeInstances.forEach {
+            it.setLogLevel(logLevel)
+        }
+        return this
+    }
+
+    override fun setLogCallback(callback: AmplitudeLogCallback?): PaltaLib {
+        amplitudeInstances.forEach {
+            it.setLogCallback(callback)
+        }
+        return this
+    }
+
+    override fun setOffline(offline: Boolean): PaltaLib {
+        amplitudeInstances.forEach {
+            it.setOffline(offline)
+        }
+        return this
+    }
+
+    override fun setFlushEventsOnClose(flushEventsOnClose: Boolean): PaltaLib {
+        amplitudeInstances.forEach {
+            it.setFlushEventsOnClose(flushEventsOnClose)
+        }
+        return this
+    }
+
+    override fun trackSessionEvents(trackingSessionEvents: Boolean): PaltaLib {
+        amplitudeInstances.forEach {
+            it.trackSessionEvents(trackingSessionEvents)
+        }
+        return this
+    }
+
+    override fun setUseDynamicConfig(useDynamicConfig: Boolean): PaltaLib {
+        amplitudeInstances.forEach {
+            it.setUseDynamicConfig(useDynamicConfig)
+        }
+        return this
+    }
+
+    override fun showEventExplorer(activity: Activity) {
+        amplitudeInstances.forEach {
+            it.showEventExplorer(activity)
+        }
+    }
+
+    override fun getSessionId(): Long {
+        return amplitudeInstances[0].sessionId
+    }
+
+    override fun startNewSessionIfNeeded(timestamp: Long): Boolean {
+        amplitudeInstances.forEach {
+            if (!it.startNewSessionIfNeeded(timestamp)) {
+                return false
+            }
+        }
+        return true
+    }
+
+    override fun clearUserProperties() {
+        amplitudeInstances.forEach {
+            it.clearUserProperties()
+        }
+    }
+
+    override fun setGroup(groupType: String?, groupName: Any?) {
+        amplitudeInstances.forEach {
+            it.setGroup(groupType, groupName)
+        }
+    }
+
+    override fun truncate(jsonObject: JSONObject?): JSONObject {
+        return amplitudeInstances[0].truncate(jsonObject)
+    }
+
+    override fun truncate(array: JSONArray?): JSONArray {
+        return amplitudeInstances[0].truncate(array)
+    }
+
+    override fun getUserId(): String? {
+        return amplitudeInstances[0].userId
+    }
+
+    override fun setDeviceId(deviceId: String?): PaltaLib {
+        amplitudeInstances.forEach {
+            it.deviceId = deviceId
+        }
+
+        return this
+    }
+
+    override fun getDeviceId(): String? {
+        return amplitudeInstances[0].deviceId
+    }
+
+    override fun regenerateDeviceId(): PaltaLib {
+        val initialInstance = amplitudeInstances[0]
+        initialInstance.regenerateDeviceId()
+
+        amplitudeInstances.forEach {
+            it.deviceId = initialInstance.deviceId
+        }
+        return this
+    }
+
+    override fun uploadEvents() {
+        amplitudeInstances.forEach {
+            it.uploadEvents()
+        }
+    }
+
+    override fun setDeviceIdCallback(callback: AmplitudeDeviceIdCallback?): PaltaLib {
+        amplitudeInstances.forEach {
+            it.setDeviceIdCallback(callback)
+        }
+        return this
+    }
+
+    override fun setPlan(plan: Plan?): PaltaLib {
+        amplitudeInstances.forEach {
+            it.setPlan(plan)
+        }
+        return this
+    }
+
+    fun initialize(context: Context, apiKey: String) {
+        CoroutineScope(Dispatchers.Main).launch {
+            var targets: List<Target>? = null
+            runCatching {
+                targets = NetworkClient().getTargetsAsync(apiKey)
+            }.onFailure {
+                // load default targets
+                val defaultConfig = context.assets.readAssetsFile("defaultconfig.json")
+                targets = Gson().fromJson(defaultConfig, TargetList::class.java).targets
+            }
+            initializeTargets(context, apiKey, targets)
+        }
+    }
+
+    private fun initializeTargets(context: Context, apiKey: String, targets: List<Target>?) {
+        targets?.let {
+            it.forEach { target ->
+                instance.addTarget(context, apiKey, target)
+            }
+        }
     }
 
     /**
@@ -193,7 +436,7 @@ class PaltaLib private constructor() {
      * @param target amplitude instance configuration
      */
 
-    fun addTarget(context: Context, target: Target) {
+    fun addTarget(context: Context, apiKey: String, target: Target) {
         if (targets.contains(target)) {
             return
         }
@@ -201,7 +444,7 @@ class PaltaLib private constructor() {
         val amplitudeInstance = Amplitude.getInstance(target.name)
         val targetSettings = target.settings
 
-        amplitudeInstance.initialize(context, targetSettings.apiKey)
+        amplitudeInstance.initialize(context, apiKey)
         amplitudeInstance.trackSessionEvents(targetSettings.trackingSessionEvents)
             .setEventUploadThreshold(targetSettings.eventUploadThreshold)
             .setEventUploadMaxBatchSize(targetSettings.eventUploadMaxBatchSize)
@@ -210,7 +453,7 @@ class PaltaLib private constructor() {
                 TimeUnit.SECONDS.toMillis(targetSettings.eventUploadPeriodSeconds.toLong()).toInt()
             )
 
-        target.serverURL?.let {
+        target.url?.let {
             amplitudeInstance.setServerUrl(it)
         }
 
