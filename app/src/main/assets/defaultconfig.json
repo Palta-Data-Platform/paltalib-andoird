@@ -1,0 +1,26 @@
+{
+    "targets": [
+            {
+            "name" : "amplitude",
+            "settings": {
+                "eventUploadThreshold": 12,
+                "eventUploadMaxBatchSize": 12,
+                "eventMaxCount": 12,
+                "eventUploadPeriodSeconds": 12,
+                "minTimeBetweenSessionsMillis": 12,
+                "trackingSessionEvents": true
+            }
+            },{
+            "name": "paltabrain",
+            "settings": {
+                "eventUploadThreshold": 12,
+                "eventUploadMaxBatchSize": 12,
+                "eventMaxCount": 12,
+                "eventUploadPeriodSeconds": 12,
+                "minTimeBetweenSessionsMillis": 12,
+                "trackingSessionEvents": true
+            },
+            "url": "https://api.paltabrain.com/events"
+        }
+    ]
+}
