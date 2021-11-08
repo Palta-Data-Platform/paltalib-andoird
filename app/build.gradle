@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.library'
     id 'kotlin-android'
+    id 'maven-publish'
 }
 
 android {
@@ -36,11 +37,78 @@ dependencies {
     implementation 'com.squareup.okhttp3:okhttp:4.9.1'
     implementation 'com.google.code.gson:gson:2.8.8'
 
-    implementation 'androidx.core:core-ktx:1.6.0'
-    implementation 'androidx.appcompat:appcompat:1.3.1'
-    implementation 'com.google.android.material:material:1.4.0'
+    implementation 'androidx.core:core-ktx:1.7.0'
     testImplementation 'junit:junit:4.13.2'
 
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.0'
+}
+
+afterEvaluate {
+    publishing {
+        publications {
+
+            release(MavenPublication) {
+
+                from components.release
+
+                pom {
+                    name = project.name
+                    description = POM_DESCRIPTION
+                    url = POM_URL
+
+                    licenses {
+                        license {
+                            name = POM_LICENCE_NAME
+                            url = POM_LICENCE_URL
+                        }
+                    }
+
+                    scm {
+                        url = POM_SCM_URL
+                        connection = POM_SCM_CONNECTION
+                        developerConnection = POM_SCM_DEV_CONNECTION
+                    }
+
+
+                }
+
+                groupId = 'com.palta'
+                artifactId = 'analytics'
+                version = '1.0'
+            }
+        }
+
+        repositories {
+            maven {
+
+                def releasesRepoUrl = layout.buildDirectory.dir(getReleaseRepositoryUrl())
+                def snapshotsRepoUrl = layout.buildDirectory.dir(getSnapshotRepositoryUrl())
+
+                url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+
+                setAllowInsecureProtocol(true)
+                credentials {
+                    username = getRepositoryUsername()
+                    password = getRepositoryPassword()
+                }
+            }
+        }
+    }
+}
+
+def getReleaseRepositoryUrl() {
+    return hasProperty('mavenReleaseUrl') ? url : ""
+}
+
+def getSnapshotRepositoryUrl() {
+    return hasProperty('mavenSnapshotUrl') ? url : ""
+}
+
+def getRepositoryUsername() {
+    return hasProperty('mavenUsername') ? username : ""
+}
+
+def getRepositoryPassword() {
+    return hasProperty('mavenPassword') ? password : ""
 }
