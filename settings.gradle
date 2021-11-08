@@ -7,4 +7,4 @@ dependencyResolutionManagement {
     }
 }
 rootProject.name = "paltalib"
-include ':app'
+include ':analytics'
