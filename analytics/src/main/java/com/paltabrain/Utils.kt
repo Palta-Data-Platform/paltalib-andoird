@@ -1,4 +1,4 @@
-package com.paltalib
+package com.paltabrain
 
 import android.content.Context
 import android.net.ConnectivityManager

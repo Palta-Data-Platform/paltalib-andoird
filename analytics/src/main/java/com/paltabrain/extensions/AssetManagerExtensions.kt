@@ -1,4 +1,4 @@
-package com.paltalib.extensions
+package com.paltabrain.extensions
 
 import android.content.res.AssetManager
 
