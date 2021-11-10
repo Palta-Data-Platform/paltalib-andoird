@@ -1,4 +1,4 @@
-package com.paltalib.entity
+package com.paltabrain.entity
 
 data class Target(
     val name: String,

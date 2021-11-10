@@ -1,14 +1,14 @@
-package com.paltalib
+package com.paltabrain
 
 import android.app.Activity
 import android.app.Application
 import android.content.Context
 import com.amplitude.api.*
 import com.google.gson.Gson
-import com.paltalib.entity.Target
-import com.paltalib.entity.TargetList
-import com.paltalib.extensions.readAssetsFile
-import com.paltalib.network.NetworkClient
+import com.paltabrain.entity.Target
+import com.paltabrain.entity.TargetList
+import com.paltabrain.extensions.readAssetsFile
+import com.paltabrain.network.NetworkClient
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

@@ -1,11 +1,11 @@
-package com.paltalib.network
+package com.paltabrain.network
 
 import com.amplitude.util.DoubleCheck
 import com.amplitude.util.Provider
 import com.google.gson.Gson
-import com.paltalib.Constants
-import com.paltalib.entity.Target
-import com.paltalib.entity.TargetList
+import com.paltabrain.Constants
+import com.paltabrain.entity.Target
+import com.paltabrain.entity.TargetList
 import kotlinx.coroutines.*
 import okhttp3.Call
 import okhttp3.OkHttpClient

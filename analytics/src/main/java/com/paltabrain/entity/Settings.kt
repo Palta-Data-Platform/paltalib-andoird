@@ -1,4 +1,4 @@
-package com.paltalib.entity
+package com.paltabrain.entity
 
 data class Settings(val eventUploadThreshold: Int, val eventUploadMaxBatchSize: Int,
     val eventMaxCount: Int, val eventUploadPeriodSeconds: Int,

@@ -1,4 +1,4 @@
-package com.paltalib
+package com.paltabrain
 
 object Constants {
     const val PALTA_CONFIG_URL = "https://api.paltabrain.com/v1/config?client="
