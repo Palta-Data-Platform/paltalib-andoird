@@ -16,13 +16,13 @@ import org.json.JSONArray
 import org.json.JSONObject
 import java.util.concurrent.TimeUnit
 
-class PaltaLib private constructor(): PaltaWrapper {
+class PaltaAnalytics private constructor(): PaltaWrapper {
 
     private val amplitudeInstances = mutableListOf<AmplitudeClient>()
     private val targets = mutableListOf<Target>()
 
     companion object {
-        val instance = PaltaLib()
+        val instance = PaltaAnalytics()
     }
 
     override fun logEvent(
@@ -69,7 +69,7 @@ class PaltaLib private constructor(): PaltaWrapper {
         }
     }
 
-    override fun setUserId(userId: String?, startNewSession: Boolean): PaltaLib {
+    override fun setUserId(userId: String?, startNewSession: Boolean): PaltaAnalytics {
         amplitudeInstances.forEach {
             it.setUserId(userId, startNewSession)
         }
@@ -128,42 +128,42 @@ class PaltaLib private constructor(): PaltaWrapper {
         }
     }
 
-    override fun setEventUploadMaxBatchSize(eventUploadMaxBatchSize: Int): PaltaLib {
+    override fun setEventUploadMaxBatchSize(eventUploadMaxBatchSize: Int): PaltaAnalytics {
         amplitudeInstances.forEach {
             it.setEventUploadMaxBatchSize(eventUploadMaxBatchSize)
         }
         return this
     }
 
-    override fun enableForegroundTracking(app: Application): PaltaLib {
+    override fun enableForegroundTracking(app: Application): PaltaAnalytics {
         amplitudeInstances.forEach {
             it.enableForegroundTracking(app)
         }
         return this
     }
 
-    override fun enableNewDeviceIdPerInstall(newDeviceIdPerInstall: Boolean): PaltaLib {
+    override fun enableNewDeviceIdPerInstall(newDeviceIdPerInstall: Boolean): PaltaAnalytics {
         amplitudeInstances.forEach {
             it.enableNewDeviceIdPerInstall(newDeviceIdPerInstall)
         }
         return this
     }
 
-    override fun useAdvertisingIdForDeviceId(): PaltaLib {
+    override fun useAdvertisingIdForDeviceId(): PaltaAnalytics {
         amplitudeInstances.forEach {
             it.useAdvertisingIdForDeviceId()
         }
         return this
     }
 
-    override fun useAppSetIdForDeviceId(): PaltaLib {
+    override fun useAppSetIdForDeviceId(): PaltaAnalytics {
         amplitudeInstances.forEach {
             it.useAppSetIdForDeviceId()
         }
         return this
     }
 
-    override fun enableLocationListening(): PaltaLib {
+    override fun enableLocationListening(): PaltaAnalytics {
         amplitudeInstances.forEach {
             it.enableLocationListening()
         }
@@ -171,98 +171,98 @@ class PaltaLib private constructor(): PaltaWrapper {
     }
 
 
-    override fun disableLocationListening(): PaltaLib {
+    override fun disableLocationListening(): PaltaAnalytics {
         amplitudeInstances.forEach {
             it.disableLocationListening()
         }
         return this
     }
 
-    override fun setEventUploadThreshold(eventUploadThreshold: Int): PaltaLib {
+    override fun setEventUploadThreshold(eventUploadThreshold: Int): PaltaAnalytics {
         amplitudeInstances.forEach {
             it.setEventUploadThreshold(eventUploadThreshold)
         }
         return this
     }
 
-    override fun setEventMaxCount(eventMaxCount: Int): PaltaLib {
+    override fun setEventMaxCount(eventMaxCount: Int): PaltaAnalytics {
         amplitudeInstances.forEach {
             it.setEventMaxCount(eventMaxCount)
         }
         return this
     }
 
-    override fun setEventUploadPeriodMillis(eventUploadPeriodMillis: Int): PaltaLib {
+    override fun setEventUploadPeriodMillis(eventUploadPeriodMillis: Int): PaltaAnalytics {
         amplitudeInstances.forEach {
             it.setEventUploadPeriodMillis(eventUploadPeriodMillis)
         }
         return this
     }
 
-    override fun setMinTimeBetweenSessionsMillis(minTimeBetweenSessionsMillis: Long): PaltaLib {
+    override fun setMinTimeBetweenSessionsMillis(minTimeBetweenSessionsMillis: Long): PaltaAnalytics {
         amplitudeInstances.forEach {
             it.setMinTimeBetweenSessionsMillis(minTimeBetweenSessionsMillis)
         }
         return this
     }
 
-    override fun setServerUrl(serverUrl: String): PaltaLib {
+    override fun setServerUrl(serverUrl: String): PaltaAnalytics {
         amplitudeInstances.forEach {
             it.setServerUrl(serverUrl)
         }
         return this
     }
 
-    override fun setBearerToken(token: String): PaltaLib {
+    override fun setBearerToken(token: String): PaltaAnalytics {
         amplitudeInstances.forEach {
             it.setBearerToken(token)
         }
         return this
     }
 
-    override fun setSessionTimeoutMillis(sessionTimeoutMillis: Long): PaltaLib {
+    override fun setSessionTimeoutMillis(sessionTimeoutMillis: Long): PaltaAnalytics {
         amplitudeInstances.forEach {
             it.setSessionTimeoutMillis(sessionTimeoutMillis)
         }
         return this
     }
 
-    override fun setTrackingOptions(trackingOptions: TrackingOptions): PaltaLib {
+    override fun setTrackingOptions(trackingOptions: TrackingOptions): PaltaAnalytics {
         amplitudeInstances.forEach {
             it.setTrackingOptions(trackingOptions)
         }
         return this
     }
 
-    override fun enableCoppaControl(): PaltaLib {
+    override fun enableCoppaControl(): PaltaAnalytics {
         amplitudeInstances.forEach {
             it.enableCoppaControl()
         }
         return this
     }
 
-    override fun disableCoppaControl(): PaltaLib {
+    override fun disableCoppaControl(): PaltaAnalytics {
         amplitudeInstances.forEach {
             it.disableCoppaControl()
         }
         return this
     }
 
-    override fun setOptOut(optOut: Boolean): PaltaLib {
+    override fun setOptOut(optOut: Boolean): PaltaAnalytics {
         amplitudeInstances.forEach {
             it.setOptOut(optOut)
         }
         return this
     }
 
-    override fun setLibraryName(libraryName: String?): PaltaLib {
+    override fun setLibraryName(libraryName: String?): PaltaAnalytics {
         amplitudeInstances.forEach {
             it.setLibraryName(libraryName)
         }
         return this
     }
 
-    override fun setLibraryVersion(libraryVersion: String?): PaltaLib {
+    override fun setLibraryVersion(libraryVersion: String?): PaltaAnalytics {
         amplitudeInstances.forEach {
             it.setLibraryVersion(libraryVersion)
         }
@@ -273,49 +273,49 @@ class PaltaLib private constructor(): PaltaWrapper {
         return amplitudeInstances[0].isOptedOut
     }
 
-    override fun enableLogging(enableLogging: Boolean): PaltaLib {
+    override fun enableLogging(enableLogging: Boolean): PaltaAnalytics {
         amplitudeInstances.forEach {
             it.enableLogging(enableLogging)
         }
         return this
     }
 
-    override fun setLogLevel(logLevel: Int): PaltaLib {
+    override fun setLogLevel(logLevel: Int): PaltaAnalytics {
         amplitudeInstances.forEach {
             it.setLogLevel(logLevel)
         }
         return this
     }
 
-    override fun setLogCallback(callback: AmplitudeLogCallback?): PaltaLib {
+    override fun setLogCallback(callback: AmplitudeLogCallback?): PaltaAnalytics {
         amplitudeInstances.forEach {
             it.setLogCallback(callback)
         }
         return this
     }
 
-    override fun setOffline(offline: Boolean): PaltaLib {
+    override fun setOffline(offline: Boolean): PaltaAnalytics {
         amplitudeInstances.forEach {
             it.setOffline(offline)
         }
         return this
     }
 
-    override fun setFlushEventsOnClose(flushEventsOnClose: Boolean): PaltaLib {
+    override fun setFlushEventsOnClose(flushEventsOnClose: Boolean): PaltaAnalytics {
         amplitudeInstances.forEach {
             it.setFlushEventsOnClose(flushEventsOnClose)
         }
         return this
     }
 
-    override fun trackSessionEvents(trackingSessionEvents: Boolean): PaltaLib {
+    override fun trackSessionEvents(trackingSessionEvents: Boolean): PaltaAnalytics {
         amplitudeInstances.forEach {
             it.trackSessionEvents(trackingSessionEvents)
         }
         return this
     }
 
-    override fun setUseDynamicConfig(useDynamicConfig: Boolean): PaltaLib {
+    override fun setUseDynamicConfig(useDynamicConfig: Boolean): PaltaAnalytics {
         amplitudeInstances.forEach {
             it.setUseDynamicConfig(useDynamicConfig)
         }
@@ -365,7 +365,7 @@ class PaltaLib private constructor(): PaltaWrapper {
         return amplitudeInstances[0].userId
     }
 
-    override fun setDeviceId(deviceId: String?): PaltaLib {
+    override fun setDeviceId(deviceId: String?): PaltaAnalytics {
         amplitudeInstances.forEach {
             it.deviceId = deviceId
         }
@@ -377,7 +377,7 @@ class PaltaLib private constructor(): PaltaWrapper {
         return amplitudeInstances[0].deviceId
     }
 
-    override fun regenerateDeviceId(): PaltaLib {
+    override fun regenerateDeviceId(): PaltaAnalytics {
         val initialInstance = amplitudeInstances[0]
         initialInstance.regenerateDeviceId()
 
@@ -393,14 +393,14 @@ class PaltaLib private constructor(): PaltaWrapper {
         }
     }
 
-    override fun setDeviceIdCallback(callback: AmplitudeDeviceIdCallback?): PaltaLib {
+    override fun setDeviceIdCallback(callback: AmplitudeDeviceIdCallback?): PaltaAnalytics {
         amplitudeInstances.forEach {
             it.setDeviceIdCallback(callback)
         }
         return this
     }
 
-    override fun setPlan(plan: Plan?): PaltaLib {
+    override fun setPlan(plan: Plan?): PaltaAnalytics {
         amplitudeInstances.forEach {
             it.setPlan(plan)
         }
