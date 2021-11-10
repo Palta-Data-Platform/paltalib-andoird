@@ -59,7 +59,7 @@ interface PaltaWrapper {
      * @param userId the user id
      * @return the PaltaLib
      */
-    fun setUserId(userId: String?, startNewSession: Boolean = false): PaltaLib
+    fun setUserId(userId: String?, startNewSession: Boolean = false): PaltaAnalytics
 
     /**
      * Identify. Use this to send an {@link com.amplitude.api.Identify} object containing
@@ -124,7 +124,7 @@ interface PaltaWrapper {
      * @param eventUploadMaxBatchSize the event upload max batch size
      * @return the PlataLib
      */
-    fun setEventUploadMaxBatchSize(eventUploadMaxBatchSize: Int): PaltaLib
+    fun setEventUploadMaxBatchSize(eventUploadMaxBatchSize: Int): PaltaAnalytics
 
 
     /**
@@ -134,7 +134,7 @@ interface PaltaWrapper {
      * @param app the Android application
      * @return the PlataLib
      */
-    fun enableForegroundTracking(app : Application) : PaltaLib
+    fun enableForegroundTracking(app : Application) : PaltaAnalytics
 
     /**
      * Whether to set a new device ID per install. If true, then the SDK will always generate a new
@@ -144,21 +144,21 @@ interface PaltaWrapper {
      * @return the PaltaLib
      * @deprecated
      */
-    fun enableNewDeviceIdPerInstall(newDeviceIdPerInstall: Boolean): PaltaLib
+    fun enableNewDeviceIdPerInstall(newDeviceIdPerInstall: Boolean): PaltaAnalytics
 
     /**
      * Whether to use the Android advertising ID (ADID) as the user's device ID.
      *
      * @return the AmplitudeClient
      */
-    fun useAdvertisingIdForDeviceId(): PaltaLib
+    fun useAdvertisingIdForDeviceId(): PaltaAnalytics
 
     /**
      * Use Android app set id as the user's device ID.
      *
      * @return the PaltaLib
      */
-    fun useAppSetIdForDeviceId(): PaltaLib
+    fun useAppSetIdForDeviceId(): PaltaAnalytics
 
     /**
      * Enable location listening in the SDK. This will add the user's current lat/lon coordinates
@@ -168,7 +168,7 @@ interface PaltaWrapper {
      *
      * @return the PaltaLib
      */
-    fun enableLocationListening(): PaltaLib
+    fun enableLocationListening(): PaltaAnalytics
 
     /**
      * Disable location listening in the SDK. This will stop the sending of the user's current
@@ -178,7 +178,7 @@ interface PaltaWrapper {
      *
      * @return the PaltaLib
      */
-    fun disableLocationListening(): PaltaLib
+    fun disableLocationListening(): PaltaAnalytics
 
     /**
      * Sets event upload threshold. The SDK will attempt to batch upload unsent events
@@ -188,7 +188,7 @@ interface PaltaWrapper {
      * @param eventUploadThreshold the event upload threshold
      * @return the PaltaLib
      */
-    fun setEventUploadThreshold(eventUploadThreshold: Int): PaltaLib
+    fun setEventUploadThreshold(eventUploadThreshold: Int): PaltaAnalytics
 
     /**
      * Sets event max count. This is the maximum number of unsent events to keep on the device
@@ -199,7 +199,7 @@ interface PaltaWrapper {
      * @param eventMaxCount the event max count
      * @return the PaltaLib
      */
-    fun setEventMaxCount(eventMaxCount: Int): PaltaLib
+    fun setEventMaxCount(eventMaxCount: Int): PaltaAnalytics
 
     /**
      * Sets event upload period millis. The SDK will attempt to batch upload unsent events
@@ -209,7 +209,7 @@ interface PaltaWrapper {
      * @param eventUploadPeriodMillis the event upload period millis
      * @return the PaltaClient
      */
-    fun setEventUploadPeriodMillis(eventUploadPeriodMillis: Int): PaltaLib
+    fun setEventUploadPeriodMillis(eventUploadPeriodMillis: Int): PaltaAnalytics
 
     /**
      * Sets min time between sessions millis.
@@ -217,21 +217,21 @@ interface PaltaWrapper {
      * @param minTimeBetweenSessionsMillis the min time between sessions millis
      * @return the PaltaClient
      */
-    fun setMinTimeBetweenSessionsMillis(minTimeBetweenSessionsMillis: Long): PaltaLib
+    fun setMinTimeBetweenSessionsMillis(minTimeBetweenSessionsMillis: Long): PaltaAnalytics
 
     /**
      * Sets a custom server url for event upload.
      * @param serverUrl - a string url for event upload.
      * @return the PaltaClient
      */
-    fun setServerUrl(serverUrl: String): PaltaLib
+    fun setServerUrl(serverUrl: String): PaltaAnalytics
 
     /**
      * Set Bearer Token to be included in request header.
      * @param token
      * @return the PaltaClient
      */
-    fun setBearerToken(token: String): PaltaLib
+    fun setBearerToken(token: String): PaltaAnalytics
 
     /**
      * Sets session timeout millis. If foreground tracking has not been enabled with
@@ -241,20 +241,20 @@ interface PaltaWrapper {
      * @param sessionTimeoutMillis the session timeout millis
      * @return the PaltaClient
      */
-    fun setSessionTimeoutMillis(sessionTimeoutMillis: Long): PaltaLib
+    fun setSessionTimeoutMillis(sessionTimeoutMillis: Long): PaltaAnalytics
 
-    fun setTrackingOptions(trackingOptions: TrackingOptions): PaltaLib
+    fun setTrackingOptions(trackingOptions: TrackingOptions): PaltaAnalytics
 
     /**
      * Enable COPPA (Children's Online Privacy Protection Act) restrictions on ADID, city, IP address and location tracking.
      * This can be used by any customer that does not want to collect ADID, city, IP address and location tracking.
      */
-    fun enableCoppaControl(): PaltaLib
+    fun enableCoppaControl(): PaltaAnalytics
 
     /**
      * Disable COPPA (Children's Online Privacy Protection Act) restrictions on ADID, city, IP address and location tracking.
      */
-    fun disableCoppaControl(): PaltaLib
+    fun disableCoppaControl(): PaltaAnalytics
 
     /**
      * Sets opt out. If true then the SDK does not track any events for the user.
@@ -262,7 +262,7 @@ interface PaltaWrapper {
      * @param optOut whether or not to opt the user out of tracking
      * @return the PaltaClient
      */
-    fun setOptOut(optOut: Boolean): PaltaLib
+    fun setOptOut(optOut: Boolean): PaltaAnalytics
 
     /**
      * Library name is default as `amplitude-android`.
@@ -270,7 +270,7 @@ interface PaltaWrapper {
      * 1. You develop your own library which bridges Amplitude Android native library.
      * 2. You want to track your library as one of the data sources.
      */
-    fun setLibraryName(libraryName: String?): PaltaLib
+    fun setLibraryName(libraryName: String?): PaltaAnalytics
 
     /**
      * Library version is default as the latest Amplitude Android SDK version.
@@ -278,7 +278,7 @@ interface PaltaWrapper {
      * 1. You develop your own library which bridges Amplitude Android native library.
      * 2. You want to track your library as one of the data sources.
      */
-    fun setLibraryVersion(libraryVersion: String?): PaltaLib
+    fun setLibraryVersion(libraryVersion: String?): PaltaAnalytics
 
     /**
      * Returns whether or not the user is opted out of tracking.
@@ -293,7 +293,7 @@ interface PaltaWrapper {
      * @param enableLogging whether to enable message logging by the SDK.
      * @return the PaltaClient
      */
-    fun enableLogging(enableLogging: Boolean): PaltaLib
+    fun enableLogging(enableLogging: Boolean): PaltaAnalytics
 
     /**
      * Sets the logging level. Logging messages will only appear if they are the same severity
@@ -302,7 +302,7 @@ interface PaltaWrapper {
      * @param logLevel the log level
      * @return the AmplitudeClient
      */
-    fun setLogLevel(logLevel: Int): PaltaLib
+    fun setLogLevel(logLevel: Int): PaltaAnalytics
 
     /**
      * Set log callback, it can help read and collect error message from sdk
@@ -310,7 +310,7 @@ interface PaltaWrapper {
      * @param callback
      * @return the PaltaClient
      */
-    fun setLogCallback(callback: AmplitudeLogCallback?): PaltaLib
+    fun setLogCallback(callback: AmplitudeLogCallback?): PaltaAnalytics
 
     /**
      * Sets offline. If offline is true, then the SDK will not upload events to Amplitude servers;
@@ -319,7 +319,7 @@ interface PaltaWrapper {
      * @param offline whether or not the SDK should be offline
      * @return the PaltaClient
      */
-    fun setOffline(offline: Boolean): PaltaLib
+    fun setOffline(offline: Boolean): PaltaAnalytics
 
     /**
      * Enable/disable flushing of unsent events on app close (enabled by default).
@@ -327,7 +327,7 @@ interface PaltaWrapper {
      * @param flushEventsOnClose whether to flush unsent events on app close
      * @return the PaltaClient
      */
-    fun setFlushEventsOnClose(flushEventsOnClose: Boolean): PaltaLib
+    fun setFlushEventsOnClose(flushEventsOnClose: Boolean): PaltaAnalytics
 
     /**
      * Track session events amplitude client. If enabled then the SDK will automatically send
@@ -336,7 +336,7 @@ interface PaltaWrapper {
      * @param trackingSessionEvents whether to enable tracking of session events
      * @return the PaltaClient
      */
-    fun trackSessionEvents(trackingSessionEvents: Boolean): PaltaLib
+    fun trackSessionEvents(trackingSessionEvents: Boolean): PaltaAnalytics
 
     /**
      * Turning this flag on will find the best server url automatically based on users' geo location.
@@ -347,7 +347,7 @@ interface PaltaWrapper {
      * @param useDynamicConfig whether to enable dynamic config
      * @return the PaltaClient
      */
-    fun setUseDynamicConfig(useDynamicConfig: Boolean): PaltaLib
+    fun setUseDynamicConfig(useDynamicConfig: Boolean): PaltaAnalytics
 
     /**
      * Show Amplitude Event Explorer for the given activity.
@@ -419,7 +419,7 @@ interface PaltaWrapper {
      * @param deviceId the device id
      * @return the AmplitudeClient
      */
-    fun setDeviceId(deviceId: String?): PaltaLib
+    fun setDeviceId(deviceId: String?): PaltaAnalytics
 
     /**
      * Get the current device id. Can be null if deviceId hasn't been initialized yet.
@@ -434,19 +434,19 @@ interface PaltaWrapper {
      * users after they log out. With a null userId and a completely new deviceId, the current user
      * would appear as a brand new user in dashboard.
      */
-    fun regenerateDeviceId(): PaltaLib
+    fun regenerateDeviceId(): PaltaAnalytics
 
     /**
      * Force SDK to upload any unsent events.
      */
     fun uploadEvents()
 
-    fun setDeviceIdCallback(callback: AmplitudeDeviceIdCallback?): PaltaLib
+    fun setDeviceIdCallback(callback: AmplitudeDeviceIdCallback?): PaltaAnalytics
 
     /**
      * Set tracking plan information.
      * @param plan Plan object
      * @return the PaltaClient
      */
-    fun setPlan(plan: Plan?): PaltaLib
+    fun setPlan(plan: Plan?): PaltaAnalytics
 }
