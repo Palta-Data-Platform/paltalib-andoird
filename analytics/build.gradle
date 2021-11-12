@@ -4,14 +4,14 @@ plugins {
     id 'maven-publish'
 }
 
+version = '1.0.0'
+
 android {
     compileSdk 31
 
     defaultConfig {
         minSdk 24
         targetSdk 31
-        versionCode 1
-        versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -46,12 +46,20 @@ dependencies {
 
 afterEvaluate {
     publishing {
+
+        repositories {
+            maven {
+
+                url = version.endsWith('SNAPSHOT') ? SNAPSHOT_REPOSITORY_URL : RELEASE_REPOSITORY_URL
+                credentials {
+                    username = getRepositoryUsername()
+                    password = getRepositoryPassword()
+                }
+            }
+        }
+
         publications {
-
             release(MavenPublication) {
-
-                from components.release
-
                 pom {
                     name = project.name
                     description = POM_DESCRIPTION
@@ -69,46 +77,26 @@ afterEvaluate {
                         connection = POM_SCM_CONNECTION
                         developerConnection = POM_SCM_DEV_CONNECTION
                     }
-
-
                 }
 
                 groupId = 'com.paltabrain'
                 artifactId = 'analytics'
-                version = '1.0'
-            }
-        }
+                version = getLibraryVersion()
 
-        repositories {
-            maven {
-
-                def releasesRepoUrl = layout.buildDirectory.dir(getReleaseRepositoryUrl())
-                def snapshotsRepoUrl = layout.buildDirectory.dir(getSnapshotRepositoryUrl())
-
-                url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
-
-                setAllowInsecureProtocol(true)
-                credentials {
-                    username = getRepositoryUsername()
-                    password = getRepositoryPassword()
-                }
+                from components.release
             }
         }
     }
 }
 
-def getReleaseRepositoryUrl() {
-    return hasProperty('mavenReleaseUrl') ? url : ""
-}
-
-def getSnapshotRepositoryUrl() {
-    return hasProperty('mavenSnapshotUrl') ? url : ""
+def getLibraryVersion() {
+    return version
 }
 
 def getRepositoryUsername() {
-    return hasProperty('mavenUsername') ? username : ""
+    return hasProperty('sonatypeUsername') ? username : ""
 }
 
 def getRepositoryPassword() {
-    return hasProperty('mavenPassword') ? password : ""
+    return hasProperty('sonatypePassword') ? password : ""
 }
