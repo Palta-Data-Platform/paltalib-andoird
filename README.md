@@ -8,7 +8,7 @@ Add dependencies:
 
 ```groovy
 dependencies {
-    implementation 'com.paltabrain:analytics:1.0.0'
+    implementation 'com.paltabrain:analytics:1.0.1'
 }
 ```
 
