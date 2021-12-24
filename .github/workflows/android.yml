@@ -16,13 +16,9 @@ jobs:
         distribution: 'adopt'
         java-version: '13'
         cache: gradle
-
-    - name: Grant execute permission for gradlew
-      run: chmod +x gradlew
+        
+        
     - name: Build with Gradle
-      run: ./gradlew build
-    - name: Run Gradle command
-      uses: Raul6469/android-gradle-action@2.0.0
+      uses: gradle/gradle-build-action@4137be6a8bf7d7133955359dbd952c0ca73b1021
       with:
-        script: publishReleasePublicationToMavenRepository
-        args: build -PsonatypeUsername=${{secrets.SONATYPE_USERNAME}} -PsonatypePassword=${{secrets.SONATYPE_PASSWORD}}
+        arguments: publishReleasePublicationToMavenRepository
