@@ -26,5 +26,4 @@ jobs:
       uses: Raul6469/android-gradle-action@2.0.0
       with:
         script: publishReleasePublicationToMavenRepository
-        gradle-version: current
-        arguments: build -PsonatypeUsername=${{secrets.SONATYPE_USERNAME}} -PsonatypePassword=${{secrets.SONATYPE_PASSWORD}}
+        args: build -PsonatypeUsername=${{secrets.SONATYPE_USERNAME}} -PsonatypePassword=${{secrets.SONATYPE_PASSWORD}}
