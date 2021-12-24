@@ -99,9 +99,9 @@ def getLibraryVersion() {
 }
 
 def getRepositoryUsername() {
-    return hasProperty('sonatypeUsername') ? username : ""
+    return hasProperty('sonatypeUsername') ? sonatypeUsername : ""
 }
 
 def getRepositoryPassword() {
-    return hasProperty('sonatypePassword') ? password : ""
+    return hasProperty('sonatypePassword') ? sonatypePassword : ""
 }
