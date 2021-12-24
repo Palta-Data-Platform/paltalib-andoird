@@ -4,7 +4,7 @@ plugins {
     id 'maven-publish'
 }
 
-version = '1.0.0'
+version = '1.0.1'
 
 android {
     compileSdk 31
@@ -33,12 +33,11 @@ android {
 
 dependencies {
 
+    api 'com.paltabrain:core:1.0.0'
     api 'com.paltabrain:analytics:1.0.1'
+    api 'com.paltabrain:attribution:1.0.0'
+
     implementation 'com.revenuecat.purchases:purchases:4.5.0'
-
-    api project(':core')
-    api project(':attribution')
-
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2'
 
     implementation 'androidx.core:core-ktx:1.7.0'
