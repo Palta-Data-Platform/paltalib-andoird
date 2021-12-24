@@ -3,8 +3,6 @@ name: Android CI
 on:
   push:
     branches: [ release ]
-  pull_request:
-    branches: [ release ]
 
 jobs:
   build:
@@ -27,5 +25,6 @@ jobs:
     - name: Run Gradle command
       uses: Raul6469/android-gradle-action@2.0.0
       with:
+        script: publishReleasePublicationToMavenRepository
         gradle-version: current
         arguments: build -PsonatypeUsername=${{secrets.SONATYPE_USERNAME}} -PsonatypePassword=${{secrets.SONATYPE_PASSWORD}}
