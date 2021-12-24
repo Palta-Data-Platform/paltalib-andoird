@@ -11,11 +11,10 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    # JAVA_HOME leaks after this step
     - uses: actions/setup-java@v2
       with:
         distribution: 'adopt'
-        java-version: '11'
+        java-version: '13'
         cache: gradle
 
     - name: Grant execute permission for gradlew
