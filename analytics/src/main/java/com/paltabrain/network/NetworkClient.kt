@@ -6,7 +6,9 @@ import com.google.gson.Gson
 import com.paltabrain.Constants
 import com.paltabrain.entity.Target
 import com.paltabrain.entity.TargetList
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.withContext
 import okhttp3.Call
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -30,10 +32,10 @@ class NetworkClient {
             header(Constants.API_KEY_HEADER, apiKey)
         }.build()
 
-        val response =  callFactory.newCall(request).execute()
+        val response = callFactory.newCall(request).execute()
 
         return response.body?.let {
-             Gson().fromJson(it.string(), TargetList::class.java).targets
+            Gson().fromJson(it.string(), TargetList::class.java).targets
         } ?: emptyList()
     }
 
