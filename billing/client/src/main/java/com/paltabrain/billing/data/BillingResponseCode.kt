@@ -1,0 +1,17 @@
+package com.paltabrain.billing.data
+
+enum class BillingResponseCode {
+    SERVICE_TIMEOUT,
+    FEATURE_NOT_SUPPORTED,
+    SERVICE_DISCONNECTED,
+    OK,
+    USER_CANCELED,
+    SERVICE_UNAVAILABLE,
+    BILLING_UNAVAILABLE,
+    ITEM_UNAVAILABLE,
+    DEVELOPER_ERROR,
+    ERROR,
+    ITEM_ALREADY_OWNED,
+    ITEM_NOT_OWNED,
+    UNKNOWN,
+}

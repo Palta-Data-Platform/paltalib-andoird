@@ -1,3 +1,10 @@
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        google()
+        mavenCentral()
+    }
+}
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
@@ -5,9 +12,10 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
-rootProject.name = "paltalib"
-include ':analytics'
-include ':purchases'
-include ':core'
-include ':demoapp'
-include ':attribution'
+
+rootProject.name = "paltalib-android"
+include ":core:logger"
+include ":core:logger-android"
+include ":billing:client"
+include ":billing:client-android"
+include ":demo:purchases"
