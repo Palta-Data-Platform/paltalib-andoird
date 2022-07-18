@@ -4,9 +4,9 @@ package com.paltabrain.billing.mappers
 import com.paltabrain.billing.data.Purchase
 import com.android.billingclient.api.Purchase as AndroidPurchase
 
-class PurchaseMapper {
+class AndroidPurchaseMapper : PurchaseMapper<AndroidPurchase> {
 
-    fun map(purchase: AndroidPurchase): Purchase {
+    override fun map(purchase: AndroidPurchase): Purchase {
         return Purchase(
             purchaseState = purchase.purchaseState,
             quantity = purchase.quantity,

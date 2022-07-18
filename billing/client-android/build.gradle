@@ -1,14 +1,16 @@
+import com.paltabrain.Dependencies
+
 plugins {
     id 'com.android.library'
     id 'org.jetbrains.kotlin.android'
 }
 
 android {
-    compileSdk 32
+    compileSdk Dependencies.Build.compileSdk
 
     defaultConfig {
-        minSdk 23
-        targetSdk 32
+        minSdk Dependencies.Build.minSdk
+        targetSdk Dependencies.Build.targetSdk
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
@@ -32,8 +34,7 @@ android {
 dependencies {
     api(project(":core:logger"))
     api(project(":billing:client"))
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.1'
-    implementation "androidx.lifecycle:lifecycle-common:2.4.1"
-    implementation "com.android.billingclient:billing-ktx:5.0.0"
-
+    implementation Dependencies.Android.kotlinCoroutinesCore
+    implementation Dependencies.Android.lifecycleCommon
+    implementation Dependencies.Android.billingKtx
 }

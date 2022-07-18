@@ -1,14 +1,19 @@
+import com.paltabrain.Dependencies
+
 plugins {
     id 'com.android.library'
     id 'org.jetbrains.kotlin.android'
+    id 'maven-publish'
 }
 
+version = "1.0.0-SNAPSHOT"
+
 android {
-    compileSdk 32
+    compileSdk Dependencies.Build.compileSdk
 
     defaultConfig {
-        minSdk 23
-        targetSdk 32
+        minSdk Dependencies.Build.minSdk
+        targetSdk Dependencies.Build.targetSdk
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
@@ -30,5 +35,62 @@ android {
 }
 
 dependencies {
-    api(project(":core:logger"))
+    api("com.paltabrain.core:logger:1.0.0-SNAPSHOT")
+}
+
+afterEvaluate {
+    publishing {
+
+        repositories {
+            maven {
+
+                url = version.endsWith('SNAPSHOT') ? SNAPSHOT_REPOSITORY_URL : RELEASE_REPOSITORY_URL
+                credentials {
+                    username = getRepositoryUsername()
+                    password = getRepositoryPassword()
+                }
+            }
+        }
+
+        publications {
+            release(MavenPublication) {
+                pom {
+                    name = project.name
+                    description = POM_DESCRIPTION
+                    url = POM_URL
+
+                    licenses {
+                        license {
+                            name = POM_LICENCE_NAME
+                            url = POM_LICENCE_URL
+                        }
+                    }
+
+                    scm {
+                        url = POM_SCM_URL
+                        connection = POM_SCM_CONNECTION
+                        developerConnection = POM_SCM_DEV_CONNECTION
+                    }
+                }
+
+                groupId = 'com.paltabrain.core'
+                artifactId = 'logger.android'
+                version = getLibraryVersion()
+
+                from components.release
+            }
+        }
+    }
+}
+
+def getLibraryVersion() {
+    return version
+}
+
+def getRepositoryUsername() {
+    return hasProperty('sonatypeUsername') ? sonatypeUsername : ""
+}
+
+def getRepositoryPassword() {
+    return hasProperty('sonatypePassword') ? sonatypePassword : ""
 }

@@ -4,9 +4,9 @@ import com.paltabrain.billing.data.BillingResponseCode
 import com.paltabrain.billing.data.BillingResult
 import com.android.billingclient.api.BillingResult as AndroidBillingResult
 
-class BillingResultMapper {
+class AndroidBillingResultMapper : BillingResultMapper<AndroidBillingResult> {
 
-    fun map(result: AndroidBillingResult): BillingResult {
+    override fun map(result: AndroidBillingResult): BillingResult {
         val responseCore = when (result.responseCode) {
             -3 -> BillingResponseCode.SERVICE_TIMEOUT
             -2 -> BillingResponseCode.FEATURE_NOT_SUPPORTED

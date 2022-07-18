@@ -1,0 +1,99 @@
+import com.paltabrain.Dependencies
+
+plugins {
+    id 'com.android.library'
+    id 'org.jetbrains.kotlin.android'
+    id 'maven-publish'
+}
+
+version = "1.0.3-SNAPSHOT"
+
+android {
+    compileSdk Dependencies.Build.compileSdk
+
+    defaultConfig {
+        minSdk Dependencies.Build.minSdk
+        targetSdk Dependencies.Build.targetSdk
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+}
+
+dependencies {
+    api("com.paltabrain.billing:client:1.0.2-SNAPSHOT")
+//    api(project(":billing:client"))
+    implementation("com.revenuecat.purchases:purchases:5.1.1")
+    implementation Dependencies.Android.kotlinCoroutinesCore
+}
+
+afterEvaluate {
+    publishing {
+
+        repositories {
+            maven {
+
+                url = version.endsWith('SNAPSHOT') ? SNAPSHOT_REPOSITORY_URL : RELEASE_REPOSITORY_URL
+                credentials {
+                    username = getRepositoryUsername()
+                    password = getRepositoryPassword()
+                }
+            }
+        }
+
+        publications {
+            release(MavenPublication) {
+                pom {
+                    name = project.name
+                    description = POM_DESCRIPTION
+                    url = POM_URL
+
+                    licenses {
+                        license {
+                            name = POM_LICENCE_NAME
+                            url = POM_LICENCE_URL
+                        }
+                    }
+
+                    scm {
+                        url = POM_SCM_URL
+                        connection = POM_SCM_CONNECTION
+                        developerConnection = POM_SCM_DEV_CONNECTION
+                    }
+                }
+
+                groupId = 'com.paltabrain.billing'
+                artifactId = 'client-revenue-cat'
+                version = getLibraryVersion()
+
+                from components.release
+            }
+        }
+    }
+}
+
+def getLibraryVersion() {
+    return version
+}
+
+def getRepositoryUsername() {
+    return hasProperty('sonatypeUsername') ? sonatypeUsername : ""
+}
+
+def getRepositoryPassword() {
+    return hasProperty('sonatypePassword') ? sonatypePassword : ""
+}

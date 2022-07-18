@@ -2,30 +2,34 @@ package com.paltabrain.purchases.demo
 
 import android.app.Application
 import android.util.Log
-import com.paltabrain.billing.BillingClientStateListener
-import com.paltabrain.billing.PaltaBilling
-import com.paltabrain.billing.PurchasesUpdatedListener
+import com.paltabrain.billing.*
 import com.paltabrain.billing.data.BillingResult
 import com.paltabrain.billing.data.Purchase
+import com.paltabrain.billing.interfaces.Billing
+import com.paltabrain.billing.rc.PurchasesConfiguration
+import com.paltabrain.billing.rc.RCBilling
+import com.paltabrain.core.logger.Logger
+import com.paltabrain.core.logger.android.AndroidLogger
 
 class App : Application(),
-    BillingClientStateListener,
     PurchasesUpdatedListener {
 
-    private lateinit var client: PaltaBilling
+    val logger: Logger = AndroidLogger()
+    lateinit var client: Billing
 
     override fun onCreate() {
         super.onCreate()
-        client = PaltaBilling(applicationContext, this)
-        client.startConnection(this)
-    }
-
-    override fun onBillingSetupFinished(result: BillingResult) {
-        Log.wtf("!@!", "onBillingSetupFinished:$result")
-    }
-
-    override fun onBillingServiceDisconnected() {
-        Log.wtf("!@!", "onBillingServiceDisconnected")
+        val wrapper = RCBilling()
+        client = wrapper
+        wrapper.config(
+            PurchasesConfiguration(
+                this,
+                apiKey = "goog_IhMfJHEnxAblynXpnQGiXPioENb",
+                appUserId = "",
+                observerMode = false,
+                debugLogsEnabled = BuildConfig.DEBUG,
+            )
+        )
     }
 
     override fun onPurchasesUpdated(result: BillingResult, purchases: List<Purchase>?) {

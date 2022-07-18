@@ -8,8 +8,9 @@ pluginManagement {
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
-        google()
         mavenCentral()
+        maven { url = "https://s01.oss.sonatype.org/content/repositories/snapshots/" }
+        google()
     }
 }
 
@@ -18,4 +19,7 @@ include ":core:logger"
 include ":core:logger-android"
 include ":billing:client"
 include ":billing:client-android"
+include ":billing:client-android-ktx"
+include ":billing:client-revenue-cat"
+include ":billing:client-palta"
 include ":demo:purchases"
