@@ -21,5 +21,5 @@ sealed class ProductDetails {
         val description: String,
         val purchaseOfferDetails: List<PurchaseOfferDetails.SubOfferDetails>,
         val originalJson: String,
-        ) : ProductDetails()
+    ) : ProductDetails()
 }

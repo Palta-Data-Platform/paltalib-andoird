@@ -8,6 +8,7 @@ import com.revenuecat.purchases.PurchasesErrorCode as RcPurchasesErrorCode
 
 class PurchasesErrorMapper : Mapper<PurchasesError, RcPurchasesError> {
 
+    @SuppressWarnings("ComplexMethod")
     override fun mapToEntity(data: PurchasesError): RcPurchasesError {
         val code = when (data.code) {
             PurchasesErrorCode.UnknownError -> RcPurchasesErrorCode.UnknownError
@@ -41,6 +42,7 @@ class PurchasesErrorMapper : Mapper<PurchasesError, RcPurchasesError> {
         )
     }
 
+    @SuppressWarnings("ComplexMethod")
     override fun mapToData(entity: RcPurchasesError): PurchasesError {
         val code = when (entity.code) {
             RcPurchasesErrorCode.UnknownError -> PurchasesErrorCode.UnknownError

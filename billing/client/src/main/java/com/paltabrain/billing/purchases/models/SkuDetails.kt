@@ -17,7 +17,11 @@ data class SkuDetails(
     }
 
     fun getOriginalPriceAmountMicros(): Long {
-        return if (this.jsonObject.has("original_price_micros")) this.jsonObject.optLong("original_price_micros") else getPriceAmountMicros()
+        return if (this.jsonObject.has("original_price_micros")) {
+            this.jsonObject.optLong("original_price_micros")
+        } else {
+            getPriceAmountMicros()
+        }
     }
 
     fun getPriceAmountMicros(): Long {

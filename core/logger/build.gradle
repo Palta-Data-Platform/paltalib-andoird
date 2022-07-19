@@ -2,6 +2,12 @@ plugins {
     id 'java-library'
     id 'org.jetbrains.kotlin.jvm'
     id 'maven-publish'
+    id 'io.gitlab.arturbosch.detekt'
+}
+
+detekt {
+    config = files(file(getRootDir().path + "/config/detekt/detekt.yml"))
+    buildUponDefaultConfig = true
 }
 
 version = "1.0.0-SNAPSHOT"

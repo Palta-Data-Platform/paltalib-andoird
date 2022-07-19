@@ -8,12 +8,16 @@ import com.paltabrain.billing.purchases.Offerings
 import com.paltabrain.billing.purchases.models.CustomerInfo
 import com.paltabrain.billing.purchases.models.PurchasesError
 import com.paltabrain.billing.purchases.models.StoreProduct
-import com.paltabrain.billing.rc.mappers.*
+import com.paltabrain.billing.rc.mappers.CustomerInfoMapper
+import com.paltabrain.billing.rc.mappers.PurchasesErrorMapper
+import com.paltabrain.billing.rc.mappers.StoreProductMapper
+import com.paltabrain.billing.rc.mappers.StoreTransactionMapper
+import com.paltabrain.billing.rc.mappers.OfferingMapper
 import com.revenuecat.purchases.Purchases
-import com.revenuecat.purchases.Store
 import com.revenuecat.purchases.PurchasesConfiguration as RcPurchasesConfiguration
 import com.revenuecat.purchases.getCustomerInfoWith
 import com.revenuecat.purchases.getOfferingsWith
+import com.revenuecat.purchases.interfaces.LogInCallback
 import com.revenuecat.purchases.CustomerInfo as RcCustomerInfo
 import com.revenuecat.purchases.PurchasesError as RcPurchasesError
 import com.revenuecat.purchases.interfaces.PurchaseCallback as RcPurchaseCallback
@@ -27,6 +31,30 @@ class RCBilling : Billing {
     private val storeProductMapper = StoreProductMapper()
     private val storeTransactionMapper = StoreTransactionMapper()
     private val offeringMapper = OfferingMapper()
+
+    fun loginWith(
+        newAppUserID: String,
+        onSuccess: (customerInfo: CustomerInfo, created: Boolean) -> Unit,
+        onError: (error: PurchasesError) -> Unit,
+    ) {
+        Purchases.sharedInstance.logIn(
+            newAppUserID = newAppUserID,
+            callback = object : LogInCallback {
+                override fun onReceived(customerInfo: RcCustomerInfo, created: Boolean) {
+                    onSuccess(
+                        customerInfoMapper.mapToData(customerInfo),
+                        created,
+                    )
+                }
+
+                override fun onError(error: RcPurchasesError) {
+                    onError(
+                        purchasesErrorMapper.mapToData(error)
+                    )
+                }
+            }
+        )
+    }
 
     fun attribution(
         attributes: Map<String, String>

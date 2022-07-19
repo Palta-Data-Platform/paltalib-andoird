@@ -6,5 +6,4 @@ interface BillingClientStateListener {
 
     fun onBillingServiceDisconnected()
     fun onBillingSetupFinished(result: BillingResult)
-
 }

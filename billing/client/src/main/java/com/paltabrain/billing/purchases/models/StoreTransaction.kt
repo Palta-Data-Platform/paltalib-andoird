@@ -3,6 +3,7 @@ package com.paltabrain.billing.purchases.models
 import com.paltabrain.billing.purchases.ProductType
 import org.json.JSONObject
 
+@SuppressWarnings("LongParameterList")
 class StoreTransaction(
     /**
      * Unique Google order identifier for the purchased transaction.
